@@ -1,0 +1,25 @@
+from grpc.beta import implementations
+import tensorflow as tf
+
+import numpy as np
+
+import threading
+import queue
+
+from tensorflow_serving.apis import predict_pb2
+from tensorflow_serving.apis import prediction_service_pb2
+
+
+def gender_predict():   
+  # running gender calculation
+  channel = implementations.insecure_channel(host, int(genderPort))
+  stub = prediction_service_pb2.beta_create_PredictionService_stub(channel)
+  genderReq = predict_pb2.PredictRequest()
+  genderReq.model_spec.name = 'gender'
+  # genderReq.model_spec.signature_name = 'gender_predict'
+  tensor_proto = tensor_pb2.TensorProto(dtype=1,#传进去的是代号，tf.float32 是1, tf.string是7
+    tensor_shape=tensor_shape_pb2.TensorShapeProto(dim=[tensor_shape_pb2.TensorShapeProto.Dim
+                                                        (size = xx) for xx in rgb_face.shape]))#传进去的是tensor_shape_pb2.TensorShapeProto()
+  genderReq.inputs['images'].CopyFrom(tensor_proto)
+  genderRes = stub.Predict(genderReq, 20.0)
+  print(genderRes)
